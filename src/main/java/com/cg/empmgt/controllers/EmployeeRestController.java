@@ -19,7 +19,7 @@ import com.cg.empmgt.entities.*;
 import com.cg.empmgt.service.*;
 import com.cg.empmgt.util.*;
 
-@RequestMapping("/employee")
+@RequestMapping("/employees")
 @RestController
 public class EmployeeRestController {
 	
