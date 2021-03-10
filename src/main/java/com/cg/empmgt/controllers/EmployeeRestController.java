@@ -29,7 +29,7 @@ public class EmployeeRestController {
 	@Autowired
 	private EmployeeUtil util;
 	
-	@GetMapping(value = "byId/{id}")
+	@GetMapping(value = "/byId/{id}")
 	public EmployeeDetails fetchEmpoyee(@PathVariable("id") Integer employeeId) {
 		Employee employee = service.findById(employeeId);
 		EmployeeDetails details=util.toDetails(employee);
