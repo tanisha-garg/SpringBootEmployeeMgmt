@@ -1,6 +1,7 @@
 package com.cg.empmgt.controllers;
 
 import java.util.List;
+import com.cg.empmgt.dto.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.empmgt.entities.*;
 import com.cg.empmgt.service.*;
+import com.cg.empmgt.util.*;
 
 @RequestMapping("/employee")
 @RestController
@@ -22,34 +24,40 @@ public class EmployeeRestController {
 	@Autowired
 	private IEmployeeService service;
 	
+	@Autowired
+	private EmployeeUtil util;
+	
 	@GetMapping(value = "byId/{id}")
-	public Employee fetchEmpoyee(@PathVariable("id") int employeeId) {
+	public EmployeeDetails fetchEmpoyee(@PathVariable("id") Integer employeeId) {
 		Employee employee = service.findById(employeeId);
-		return employee;
+		EmployeeDetails details=util.toDetails(employee);
+		return details;
 	}
 	
 	@GetMapping
-	public List<Employee> fetchAllEmployee(){
+	public List<EmployeeDetails> fetchAllEmployee(){
 		List<Employee> list = service.findAll();
-		return list;
+		List<EmployeeDetails>desiredList = util.toDetailsList(list);
+		return desiredList;
 	}
 	
 	@PostMapping("/add")
-    public String addEmployee(@RequestBody Employee requestData) {
+    public String addEmployee(@RequestBody CreateEmployeeRequest requestData) {
         Employee create = service.add(requestData.getName(), requestData.getDepartment());
         return "Created employee with id=" + create.getId();
     }
 	
 	@PutMapping("/changename")
-    public Employee changeName(@RequestBody Employee employee) {
-        employee = service.updateName(employee.getId(), employee.getName());
-        return employee;
+    public EmployeeDetails changeName(@RequestBody ChangeNameRequest requestData) {
+        Employee employee = service.updateName(requestData.getId(), requestData.getName());
+        EmployeeDetails desiredList = util.toDetails(employee);
+        return desiredList;
     }
 
     @DeleteMapping("/delete")
-    public String delete(@RequestBody Employee employee){
-        service.removeById(employee.getId());
-        return "Employee deleted for id="+employee.getId();
+    public String delete(@RequestBody DeleteEmployeeRequest requestData){
+        service.removeById(requestData.getId());
+        return "Employee deleted for id="+requestData.getId();
     }
 	
 	

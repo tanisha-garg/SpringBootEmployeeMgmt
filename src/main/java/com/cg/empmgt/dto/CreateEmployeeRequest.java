@@ -1,6 +1,6 @@
 package com.cg.empmgt.dto;
 
-public class CreateEmpoyeeRequest {
+public class CreateEmployeeRequest {
 	
 	private String name;
 	private String department;
